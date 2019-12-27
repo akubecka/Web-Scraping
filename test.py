@@ -36,12 +36,26 @@ soup = BeautifulSoup(src, 'lxml')
 # Now that the page source has been processed via Beautifulsoup
 # we can access specific information directly from it. For instance,
 # say we want to see a list of all of the links on the page:
+teamNames = []
 links = soup.find("tbody", {"class":"tableBodyContainer isPL"})
 link = links.findAll("td", {"class": "team"})
 for name in link:
     namee = name.findAll("span", {"class":"long"})
     for nameee in namee:
+        teamNames.append(nameee.string)
         print(nameee.string)
+
+with open('index.handlebars', 'w') as f:
+    f.write("<table>\n")
+    f.write("<tr><th>'Position'</th><th>'Team'</th>\n")
+    i=1
+    for tN in teamNames:
+        f.write("<tr>")
+        f.write("<td class='place'>"+str(i)+"</td>")
+        f.write("<td class ='teamName' name='"+tN+"'>"+tN+"</td>")
+        i=i+1
+        f.write("</tr>\n")
+    f.write("</table>")
 
 #print(link['data-filtered-table-row-name'])
 #for link in links:
